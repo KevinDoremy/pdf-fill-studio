@@ -37,11 +37,35 @@ Copy `profile.example.json` to `profile.json`, fill in your own data, and pass i
 
 ## Install
 
+**With pip** (gives the `pdf-fill-studio` command):
+
+```bash
+pip install pdf-fill-studio
+pdf-fill-studio path/to/form.pdf
+```
+
+**As a Claude Code plugin:**
+
+```
+/plugin marketplace add KevinDoremy/pdf-fill-studio
+/plugin install pdf-fill-studio@pdf-fill-studio
+```
+
+**From source:**
+
 ```bash
 git clone https://github.com/KevinDoremy/pdf-fill-studio
 cd pdf-fill-studio
-python3 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python -m pdf_fill_studio.cli path/to/form.pdf
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e .
+pdf-fill-studio path/to/form.pdf
+```
+
+## As an MCP server (optional)
+
+Expose the fill tools over the Model Context Protocol:
+
+```bash
+pip install "pdf-fill-studio[mcp]"
+pdf-fill-studio-mcp        # stdio MCP server: detect_pdf_type, list_fields, fill_acroform_fields, fill_flat_text
 ```
