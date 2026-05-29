@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.0
+- XFA form fill (datasets injection + AcroForm /V) with Adobe Reader fallback.
+
 ## 0.3.1
 - Add this changelog. First release published via the automated GitHub Actions + PyPI trusted-publishing pipeline.
 

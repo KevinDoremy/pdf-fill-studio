@@ -26,7 +26,7 @@ From source instead: `python3 -m venv .venv && .venv/bin/pip install -e .`, then
 3. **Flat (no fields):** a local browser editor opens. Tell the user to type values, drag boxes
    onto the lines, nudge with arrow keys, and click "Export PDF". Comb fields (one box per
    character, e.g. postal code) are detected and filled one character per cell automatically.
-4. **XFA:** tell the user this form type is not supported yet (open it in free Adobe Reader).
+4. **XFA (LiveCycle / gov forms):** run with --profile; values are injected into the XFA datasets and the AcroForm /V. Tell the user to open the result in free Adobe Reader if their viewer shows blanks; a dynamic XFA that still won't fill should be completed directly in Adobe Reader.
 5. The filled PDF is written to `out/`. The user signs it themselves.
 
 ## Self-check (before declaring done)
