@@ -8,6 +8,7 @@ from mcp.server.fastmcp import FastMCP
 
 from pdf_fill_studio.detect_type import detect_type
 from pdf_fill_studio.acroform import extract_acroform_fields, fill_acroform
+from pdf_fill_studio.xfa import extract_xfa_fields, fill_xfa
 from pdf_fill_studio.build_job import build_job
 from pdf_fill_studio.bake_overlay import bake_overlay
 
@@ -22,14 +23,23 @@ def detect_pdf_type(pdf_path: str) -> dict:
 
 @mcp.tool()
 def list_fields(pdf_path: str) -> list:
-    """List fillable fields. AcroForm: native field names and types. Flat: guessed labels."""
+    """List fillable fields. AcroForm: native field names and types. XFA: datasets leaf names. Flat: guessed labels."""
     info = detect_type(pdf_path)
     if info["type"] == "acroform":
         return extract_acroform_fields(pdf_path)
+    if info["type"].startswith("xfa"):
+        return extract_xfa_fields(pdf_path)
     if info["type"] == "flat":
         job = build_job(pdf_path, os.path.join(os.path.dirname(os.path.abspath(pdf_path)), "_job.json"))
         return [{"id": f["id"], "label": f["label"], "type": f["type"]} for f in job["fields"]]
     return []
+
+
+@mcp.tool()
+def fill_xfa_fields(pdf_path: str, values: dict, out_path: str) -> str:
+    """Fill XFA form fields by injecting values into the datasets packet and setting AcroForm /V.
+    Open the result in free Adobe Reader if your viewer shows blanks (it re-renders XFA)."""
+    return fill_xfa(pdf_path, values, out_path)
 
 
 @mcp.tool()

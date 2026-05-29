@@ -5,6 +5,7 @@ import os
 from pdf_fill_studio.build_job import build_job
 from pdf_fill_studio.serve_editor import serve, handle_export
 from pdf_fill_studio.acroform import fill_acroform
+from pdf_fill_studio.xfa import fill_xfa
 from pdf_fill_studio.profile import load_profile, match_fields
 
 
@@ -31,6 +32,19 @@ def main(argv=None):
         fill_acroform(args.pdf, values, out)
         print("Wrote:", out)
         print("Needs manual input:", unmatched)
+        return
+
+    if job["type"].startswith("xfa"):
+        profile = load_profile(args.profile) if args.profile else {}
+        values, unmatched = match_fields(job["fields"], profile)
+        fill_xfa(args.pdf, values, out)
+        print("Wrote:", out)
+        print("Needs manual input:", unmatched)
+        print(
+            "XFA form: values were injected. If your viewer shows blanks, open the output "
+            "in free Adobe Reader (it re-renders XFA). Dynamic XFA that still fails should "
+            "be filled directly in Adobe Reader."
+        )
         return
 
     if args.profile:
