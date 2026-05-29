@@ -53,7 +53,9 @@ def guess_positions(path):
                     "x": round(entry_x, 1),
                     "y": round(w["top"], 1),
                     "w": round(entry_w, 1),
-                    "h": round(w["bottom"] - w["top"] + 6, 1),
+                    # Height = the label's own text height so the baked baseline lines up
+                    # with the label baseline (value sits on the line, not below it).
+                    "h": round(w["bottom"] - w["top"], 1),
                     "value": "",
                     "type": ftype,
                     "font_size": DEFAULT_FONT_SIZE,
