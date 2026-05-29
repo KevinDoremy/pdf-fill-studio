@@ -39,7 +39,8 @@ def list_fields(pdf_path: str) -> list:
 def fill_xfa_fields(pdf_path: str, values: dict, out_path: str) -> str:
     """Fill XFA form fields by injecting values into the datasets packet and setting AcroForm /V.
     Open the result in free Adobe Reader if your viewer shows blanks (it re-renders XFA)."""
-    return fill_xfa(pdf_path, values, out_path)
+    info = detect_type(pdf_path)
+    return fill_xfa(pdf_path, values, out_path, xfa_type=info["type"])
 
 
 @mcp.tool()
