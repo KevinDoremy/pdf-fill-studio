@@ -37,7 +37,7 @@ def main(argv=None):
     if job["type"].startswith("xfa"):
         profile = load_profile(args.profile) if args.profile else {}
         values, unmatched = match_fields(job["fields"], profile)
-        fill_xfa(args.pdf, values, out)
+        fill_xfa(args.pdf, values, out, xfa_type=job["type"])
         print("Wrote:", out)
         print("Needs manual input:", unmatched)
         print(

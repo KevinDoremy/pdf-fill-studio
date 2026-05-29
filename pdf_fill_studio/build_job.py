@@ -7,6 +7,11 @@ from pdf_fill_studio.acroform import extract_acroform_fields
 from pdf_fill_studio.xfa import extract_xfa_fields
 
 
+def _write_job(job, out_path):
+    with open(out_path, "w", encoding="utf-8") as fh:
+        json.dump(job, fh, ensure_ascii=False, indent=2)
+
+
 def build_job(pdf_path, out_path):
     info = detect_type(pdf_path)
     if info["type"] in ("xfa-static", "xfa-dynamic"):
@@ -15,8 +20,7 @@ def build_job(pdf_path, out_path):
             "type": info["type"],
             "fields": extract_xfa_fields(pdf_path),
         }
-        with open(out_path, "w", encoding="utf-8") as fh:
-            json.dump(job, fh, ensure_ascii=False, indent=2)
+        _write_job(job, out_path)
         return job
     if info["type"] == "acroform":
         job = {
@@ -24,8 +28,7 @@ def build_job(pdf_path, out_path):
             "type": "acroform",
             "fields": extract_acroform_fields(pdf_path),
         }
-        with open(out_path, "w", encoding="utf-8") as fh:
-            json.dump(job, fh, ensure_ascii=False, indent=2)
+        _write_job(job, out_path)
         return job
     positions = guess_positions(pdf_path)
     job = {
@@ -34,6 +37,5 @@ def build_job(pdf_path, out_path):
         "pages": positions["pages"],
         "fields": positions["fields"],
     }
-    with open(out_path, "w", encoding="utf-8") as fh:
-        json.dump(job, fh, ensure_ascii=False, indent=2)
+    _write_job(job, out_path)
     return job

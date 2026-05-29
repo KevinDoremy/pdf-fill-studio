@@ -23,3 +23,25 @@ def test_fill_xfa(tmp_path):
         assert vs == ["Marie Tremblay"]
     finally:
         pdf.close()
+
+
+def test_fill_xfa_static_no_needs_rendering(tmp_path):
+    """Static XFA must not get NeedsRendering=True (causes blank display in Adobe Reader)."""
+    out = tmp_path / "static_filled.pdf"
+    fill_xfa("tests/fixtures/xfa_form.pdf", {"full_name": "Test"}, str(out), xfa_type="xfa-static")
+    pdf = pikepdf.open(str(out))
+    try:
+        assert pdf.Root.get("/NeedsRendering", None) is None
+    finally:
+        pdf.close()
+
+
+def test_fill_xfa_dynamic_sets_needs_rendering(tmp_path):
+    """Dynamic XFA must set NeedsRendering=True so the viewer re-renders from template+datasets."""
+    out = tmp_path / "dynamic_filled.pdf"
+    fill_xfa("tests/fixtures/xfa_form.pdf", {"full_name": "Test"}, str(out), xfa_type="xfa-dynamic")
+    pdf = pikepdf.open(str(out))
+    try:
+        assert bool(pdf.Root.get("/NeedsRendering", False)) is True
+    finally:
+        pdf.close()
