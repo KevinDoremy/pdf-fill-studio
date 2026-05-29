@@ -1,0 +1,14 @@
+{
+  "name": "pdf-fill-studio",
+  "description": "Local, private PDF form filling for Claude Code — flat, AcroForm, and per-character (comb) fields with a visual editor.",
+  "owner": { "name": "Kevin Doremy", "url": "https://github.com/KevinDoremy" },
+  "plugins": [
+    {
+      "name": "pdf-fill-studio",
+      "source": "./",
+      "description": "Fill PDF forms locally with a visual editor — flat, AcroForm, and per-character (comb) fields. No cloud, no Adobe.",
+      "license": "MIT",
+      "keywords": ["pdf", "pdf-forms", "fill", "acroform", "claude-code", "local-first", "privacy"]
+    }
+  ]
+}
