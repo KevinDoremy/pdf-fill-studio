@@ -1,7 +1,7 @@
 {
   "name": "pdf-fill-studio",
   "description": "Fill PDF forms locally with a visual editor. Flat, AcroForm, and per-character (comb) fields. No cloud, no Adobe.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": { "name": "Kevin Doremy" },
   "homepage": "https://github.com/KevinDoremy/pdf-fill-studio",
   "license": "MIT",
