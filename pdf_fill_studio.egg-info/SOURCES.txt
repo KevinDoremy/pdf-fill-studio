@@ -9,6 +9,7 @@ pdf_fill_studio/cli.py
 pdf_fill_studio/coords.py
 pdf_fill_studio/detect_type.py
 pdf_fill_studio/guess_positions.py
+pdf_fill_studio/mcp_server.py
 pdf_fill_studio/profile.py
 pdf_fill_studio/render_page.py
 pdf_fill_studio/serve_editor.py
@@ -35,6 +36,7 @@ tests/test_coords.py
 tests/test_detect_type.py
 tests/test_fixture.py
 tests/test_guess_positions.py
+tests/test_mcp.py
 tests/test_placement.py
 tests/test_profile.py
 tests/test_render.py

@@ -1,2 +1,3 @@
 [console_scripts]
 pdf-fill-studio = pdf_fill_studio.cli:main
+pdf-fill-studio-mcp = pdf_fill_studio.mcp_server:main

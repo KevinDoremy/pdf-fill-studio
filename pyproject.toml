@@ -35,6 +35,7 @@ Issues = "https://github.com/KevinDoremy/pdf-fill-studio/issues"
 
 [project.scripts]
 pdf-fill-studio = "pdf_fill_studio.cli:main"
+pdf-fill-studio-mcp = "pdf_fill_studio.mcp_server:main"
 
 [tool.setuptools]
 packages = ["pdf_fill_studio"]
