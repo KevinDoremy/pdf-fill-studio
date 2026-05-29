@@ -23,3 +23,11 @@ def extract_acroform_fields(pdf_path):
             "page": page_of.get(name, 1),
         })
     return fields
+
+def fill_acroform(pdf_path, values, out_path):
+    writer = PdfWriter(clone_from=pdf_path)
+    for page in writer.pages:
+        writer.update_page_form_field_values(page, values, auto_regenerate=True)
+    with open(out_path, "wb") as fh:
+        writer.write(fh)
+    return out_path
