@@ -24,14 +24,16 @@ you a real editor instead.
 - Per-character (comb) fields: one character centered per cell (postal codes, SINs, dates).
 - Browser editor: drag values over the rendered page, 1px nudges with the arrow
   keys, signature left blank.
+- AcroForm (native fields) fill, with profile autofill from a private JSON. A SIN or bank number is never stored.
 - Runs as a Claude Code skill. MIT licensed, and it never touches the network at runtime.
+
+### Profile
+
+Copy `profile.example.json` to `profile.json`, fill in your own data, and pass it with `--profile profile.json`. The CLI fills every matched field automatically and prints what still needs manual input. Keep `profile.json` out of git (it is already in `.gitignore` by convention; add it if needed). A SIN, bank account, or card number in the profile file is silently skipped and never written to any PDF.
 
 ### Roadmap
 
-- AcroForm native-field fill and XFA, with an Adobe Reader fallback for the dynamic
-  XFA forms that defeat every headless library.
-- Profile autofill from a private file you keep yourself, asking only for what's
-  missing. A SIN or bank number is never stored.
+- XFA dynamic forms, with an Adobe Reader fallback for the forms that defeat every headless library.
 
 ## Install
 
