@@ -10,7 +10,7 @@ def build_job(pdf_path, out_path):
     info = detect_type(pdf_path)
     if info["type"] == "xfa":
         raise NotImplementedError(
-            f"XFA PDFs are not supported."
+            "XFA PDFs are not supported."
         )
     if info["type"] == "acroform":
         job = {

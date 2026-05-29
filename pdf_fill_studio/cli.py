@@ -33,6 +33,13 @@ def main(argv=None):
         print("Needs manual input:", unmatched)
         return
 
+    if args.profile:
+        profile = load_profile(args.profile)
+        values, _ = match_fields(job["fields"], profile)
+        for field in job["fields"]:
+            if field["id"] in values:
+                field["value"] = values[field["id"]]
+
     if args.no_editor:
         posted = json.loads(open(args.no_editor, encoding="utf-8").read())
         handle_export(job, posted, out)
