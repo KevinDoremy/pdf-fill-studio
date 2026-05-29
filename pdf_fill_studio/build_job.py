@@ -8,7 +8,7 @@ from pdf_fill_studio.acroform import extract_acroform_fields
 
 def build_job(pdf_path, out_path):
     info = detect_type(pdf_path)
-    if info["type"] == "xfa":
+    if info["type"] in ("xfa-static", "xfa-dynamic"):
         raise NotImplementedError(
             "XFA PDFs are not supported."
         )
