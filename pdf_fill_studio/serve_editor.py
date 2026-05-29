@@ -10,7 +10,7 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pdf_fill_studio.bake_overlay import bake_overlay
 
-EDITOR_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "editor")
+EDITOR_DIR = os.path.join(os.path.dirname(__file__), "editor")
 
 
 def handle_export(job, posted, out_path):

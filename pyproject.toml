@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf-fill-studio"
+version = "0.2.0"
+description = "Fill PDF forms locally and place each value precisely in a browser editor. Flat, AcroForm, and per-character (comb) fields. No cloud, no Adobe."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Kevin Doremy" }]
+requires-python = ">=3.9"
+keywords = ["pdf", "pdf-forms", "pdf-filler", "forms", "acroform", "claude-code", "local-first", "privacy"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Office/Business",
+    "Topic :: Utilities",
+    "Environment :: Console",
+]
+dependencies = [
+    "pdfplumber>=0.11",
+    "reportlab>=4.2",
+    "pypdf>=6.0",
+    "pikepdf>=9.0",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.2"]
+
+[project.urls]
+Homepage = "https://github.com/KevinDoremy/pdf-fill-studio"
+Repository = "https://github.com/KevinDoremy/pdf-fill-studio"
+Issues = "https://github.com/KevinDoremy/pdf-fill-studio/issues"
+
+[project.scripts]
+pdf-fill-studio = "pdf_fill_studio.cli:main"
+
+[tool.setuptools]
+packages = ["pdf_fill_studio"]
+
+[tool.setuptools.package-data]
+pdf_fill_studio = ["editor/*", "editor/vendor/*"]

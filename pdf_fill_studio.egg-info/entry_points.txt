@@ -1,0 +1,2 @@
+[console_scripts]
+pdf-fill-studio = pdf_fill_studio.cli:main
