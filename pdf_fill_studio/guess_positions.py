@@ -27,8 +27,10 @@ LABEL_ROW_TOL = 10         # a comb's label sits within this of the cell row
 
 
 def _looks_like_label(text):
-    # Labels usually end with ":" or are short words; keep it permissive.
-    return text.strip().endswith(":") or len(text.strip()) <= 24
+    # A label ends with a colon ("Nom:", "postal:"). Requiring the colon avoids
+    # treating every short word (titles, prose) as a field. Non-colon labels are
+    # a known limitation handled later via line/cell adjacency.
+    return text.strip().endswith(":")
 
 
 def _cell_like(r):
