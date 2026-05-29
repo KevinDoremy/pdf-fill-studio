@@ -45,7 +45,7 @@ function makeBox(f) {
   el.style.top = `${f.y * RENDER_SCALE}px`;
   el.style.minWidth = `${f.w * RENDER_SCALE}px`;
   el.style.height = `${f.h * RENDER_SCALE}px`;
-  el.textContent = f.type === "signature" ? "à signer" : (f.value || f.label);
+  el.textContent = f.type === "signature" ? "sign here" : (f.value || f.label);
   // Signature stays blank; comb cells are auto-detected and precise, so neither drags.
   if (f.type !== "signature" && f.type !== "comb") enableDrag(el);
   el.addEventListener("mousedown", () => select(el));
@@ -112,7 +112,7 @@ async function exportLayout() {
     out.fields.push({ ...f, x: pts.x, y: pts.y, w: pts.w, h: pts.h });
   }
   const res = await fetch("./export", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(out) });
-  document.getElementById("status").textContent = res.ok ? "Exporté. Tu peux signer." : "Erreur export.";
+  document.getElementById("status").textContent = res.ok ? "Exported. Ready to sign." : "Export failed.";
 }
 
 main();

@@ -76,7 +76,7 @@ def serve(job, out_path, open_browser=True):
     httpd = HTTPServer(("127.0.0.1", 0), Handler)
     port = httpd.server_address[1]
     url = f"http://127.0.0.1:{port}/"
-    print(f"Éditeur ouvert : {url}")
+    print(f"Editor running at: {url}")
     if open_browser:
         webbrowser.open(url)
     t = threading.Thread(target=httpd.serve_forever, daemon=True)

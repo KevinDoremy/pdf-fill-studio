@@ -14,7 +14,7 @@ def main(argv=None):
                         help="Skip the browser; bake from a saved layout JSON.")
     args = parser.parse_args(argv)
 
-    out = args.out or os.path.join("out", os.path.basename(args.pdf).replace(".pdf", "_rempli.pdf"))
+    out = args.out or os.path.join("out", os.path.basename(args.pdf).replace(".pdf", "_filled.pdf"))
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
 
     job_path = os.path.join("out", "job.json")
@@ -24,11 +24,11 @@ def main(argv=None):
     if args.no_editor:
         posted = json.loads(open(args.no_editor, encoding="utf-8").read())
         handle_export(job, posted, out)
-        print(f"Écrit : {out}")
+        print(f"Wrote: {out}")
         return
 
     serve(job, out)
-    print(f"Écrit : {out}")
+    print(f"Wrote: {out}")
 
 
 if __name__ == "__main__":
