@@ -46,7 +46,8 @@ function makeBox(f) {
   el.style.minWidth = `${f.w * RENDER_SCALE}px`;
   el.style.height = `${f.h * RENDER_SCALE}px`;
   el.textContent = f.type === "signature" ? "à signer" : (f.value || f.label);
-  if (f.type !== "signature") enableDrag(el);
+  // Signature stays blank; comb cells are auto-detected and precise, so neither drags.
+  if (f.type !== "signature" && f.type !== "comb") enableDrag(el);
   el.addEventListener("mousedown", () => select(el));
   return el;
 }

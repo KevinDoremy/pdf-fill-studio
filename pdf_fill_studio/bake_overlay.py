@@ -12,18 +12,34 @@ from pdf_fill_studio.coords import topleft_box_to_baseline
 # pypdf does not warn about merging pages that are not attached to a writer.
 
 
+def _draw_comb(c, field, value, page_height):
+    """Draw one character centered in each successive cell (spaces skipped)."""
+    size = field.get("font_size", 10)
+    chars = [ch for ch in value if not ch.isspace()]
+    for ch, cell in zip(chars, field.get("cells", [])):
+        char_w = c.stringWidth(ch, "Helvetica", size)
+        cx = cell["x"] + cell["w"] / 2 - char_w / 2
+        center_y = page_height - cell["y"] - cell["h"] / 2  # cell center, bottom-left origin
+        baseline = center_y - 0.35 * size                   # lower baseline so glyph is centered
+        c.drawString(cx, baseline, ch)
+
+
 def _overlay_for_page(page_fields, width, height):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=(width, height))
     for f in page_fields:
-        if f.get("type") == "signature":
+        ftype = f.get("type")
+        if ftype == "signature":
             continue
         value = (f.get("value") or "").strip()
         if not value:
             continue
         size = f.get("font_size", 10)
-        x, baseline = topleft_box_to_baseline(f["x"], f["y"], f["w"], f["h"], height, size)
         c.setFont("Helvetica", size)
+        if ftype == "comb":
+            _draw_comb(c, f, value, height)
+            continue
+        x, baseline = topleft_box_to_baseline(f["x"], f["y"], f["w"], f["h"], height, size)
         c.drawString(x, baseline, value)
     c.showPage()
     c.save()
