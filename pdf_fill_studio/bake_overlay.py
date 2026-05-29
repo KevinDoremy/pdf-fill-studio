@@ -8,6 +8,10 @@ from pypdf import PdfReader, PdfWriter
 from pdf_fill_studio.coords import topleft_box_to_baseline
 
 
+# Note: clone into the writer first, then merge onto the writer-owned pages, so
+# pypdf does not warn about merging pages that are not attached to a writer.
+
+
 def _overlay_for_page(page_fields, width, height):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=(width, height))
@@ -28,16 +32,14 @@ def _overlay_for_page(page_fields, width, height):
 
 
 def bake_overlay(job, out_path):
-    reader = PdfReader(job["pdf"])
-    writer = PdfWriter()
+    writer = PdfWriter(clone_from=job["pdf"])
     page_dims = {p["page"]: (p["width"], p["height"]) for p in job["pages"]}
-    for pidx, page in enumerate(reader.pages, start=1):
+    for pidx, page in enumerate(writer.pages, start=1):
         fields = [f for f in job["fields"] if f["page"] == pidx]
         if fields:
             width, height = page_dims.get(pidx, (float(page.mediabox.width), float(page.mediabox.height)))
             overlay_page = _overlay_for_page(fields, width, height)
             page.merge_page(overlay_page)
-        writer.add_page(page)
     with open(out_path, "wb") as fh:
         writer.write(fh)
     return out_path
