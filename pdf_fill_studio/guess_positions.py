@@ -33,6 +33,28 @@ def _looks_like_label(text):
     return text.strip().endswith(":")
 
 
+def _full_label(colon_word, words):
+    """Join the contiguous words on the same row that form the label phrase ending at
+    `colon_word` (e.g. "Nom complet:" rather than just "complet:")."""
+    row_top = colon_word["top"]
+    left = sorted(
+        (w for w in words
+         if w is not colon_word
+         and abs(w["top"] - row_top) <= ROW_TOLERANCE
+         and w["x1"] <= colon_word["x0"] + 1),
+        key=lambda w: w["x0"],
+    )
+    phrase = [colon_word]
+    prev_x0 = colon_word["x0"]
+    for w in reversed(left):
+        if 0 <= prev_x0 - w["x1"] <= 16:   # small gap => part of the same label
+            phrase.insert(0, w)
+            prev_x0 = w["x0"]
+        else:
+            break
+    return " ".join(w["text"] for w in phrase)
+
+
 def _cell_like(r):
     return (CELL_MIN_W <= r["width"] <= CELL_MAX_W and
             CELL_MIN_H <= r["height"] <= CELL_MAX_H)
@@ -133,11 +155,12 @@ def guess_positions(path):
                 if entry_w < 30:
                     entry_w = DEFAULT_ENTRY_WIDTH
                 fid += 1
-                ftype = "signature" if SIGNATURE_RE.search(text) else "text"
+                label = _full_label(w, words)
+                ftype = "signature" if SIGNATURE_RE.search(label) else "text"
                 fields.append({
                     "id": f"f{fid}",
                     "page": pidx,
-                    "label": text,
+                    "label": label,
                     "x": round(entry_x, 1),
                     "y": round(w["top"], 1),
                     "w": round(entry_w, 1),
