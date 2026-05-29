@@ -16,6 +16,8 @@ DEFAULT_FONT_SIZE = 10
 ROW_TOLERANCE = 6          # words within this vertical distance are on the same row
 DEFAULT_ENTRY_WIDTH = 200  # points, when no following label/edge is found
 GAP_AFTER_LABEL = 6        # points between label end and entry start
+LINE_LEFT_PAD = 4          # small gap between the underline start and the value
+MIN_LINE_LEN = 40          # a horizontal line must be at least this long to be an entry line
 
 # Comb (per-character cell) detection.
 COMB_MIN_CELLS = 3
@@ -122,6 +124,26 @@ def _comb_field(run, words, used_word_ids, fid, pidx):
     }
 
 
+def _horizontal_lines(page):
+    """Long horizontal lines (entry underlines), as {x0, x1, top} in top-left points."""
+    out = []
+    for obj in list(page.lines) + list(page.edges):
+        if abs(obj["top"] - obj["bottom"]) <= 1.5 and (obj["x1"] - obj["x0"]) >= MIN_LINE_LEN:
+            out.append({"x0": obj["x0"], "x1": obj["x1"], "top": obj["top"]})
+    return out
+
+
+def _line_for_label(word, hlines):
+    """The underline that belongs to a label: just below its baseline, extending right."""
+    base = word["bottom"]
+    cands = [L for L in hlines
+             if -2 <= (L["top"] - base) <= 14 and L["x1"] > word["x1"]]
+    if not cands:
+        return None
+    cands.sort(key=lambda L: abs(L["x0"] - word["x1"]))
+    return cands[0]
+
+
 def guess_positions(path):
     pages_out = []
     fields = []
@@ -132,6 +154,7 @@ def guess_positions(path):
             words = page.extract_words(use_text_flow=False)
             words = sorted(words, key=lambda w: (round(w["top"]), w["x0"]))
             used_word_ids = set()
+            hlines = _horizontal_lines(page)
 
             for run in _detect_combs(page.rects):
                 fid += 1
@@ -157,18 +180,29 @@ def guess_positions(path):
                 fid += 1
                 label = _full_label(w, words)
                 ftype = "signature" if SIGNATURE_RE.search(label) else "text"
+                fs = DEFAULT_FONT_SIZE
+                line = _line_for_label(w, hlines)
+                if line is not None:
+                    # Snap to the underline: start at the line + a small gap, sit just above it.
+                    box_x = round(max(line["x0"] + LINE_LEFT_PAD, w["x1"] + GAP_AFTER_LABEL), 1)
+                    box_h = fs
+                    box_y = round(line["top"] - 1 - box_h, 1)
+                    box_w = round(line["x1"] - box_x, 1)
+                else:
+                    box_x = round(entry_x, 1)
+                    box_y = round(w["top"], 1)
+                    box_w = round(entry_w, 1)
+                    box_h = round(w["bottom"] - w["top"], 1)
                 fields.append({
                     "id": f"f{fid}",
                     "page": pidx,
                     "label": label,
-                    "x": round(entry_x, 1),
-                    "y": round(w["top"], 1),
-                    "w": round(entry_w, 1),
-                    # Height = the label's own text height so the baked baseline lines up
-                    # with the label baseline (value sits on the line, not below it).
-                    "h": round(w["bottom"] - w["top"], 1),
+                    "x": box_x,
+                    "y": box_y,
+                    "w": box_w,
+                    "h": box_h,
                     "value": "",
                     "type": ftype,
-                    "font_size": DEFAULT_FONT_SIZE,
+                    "font_size": fs,
                 })
     return {"pages": pages_out, "fields": fields}
