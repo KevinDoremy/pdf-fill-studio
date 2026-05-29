@@ -2,6 +2,8 @@
 
 > Fill any PDF on your machine, then drag every value into place.
 
+![pdf-fill-studio demo](assets/demo.gif)
+
 pdf-fill-studio fills PDF forms locally and hands you a visual editor to fix the
 placement. It detects how a PDF is built and fills it the right way. The filled
 values show up over a browser preview of the real page. You drag them into the
@@ -18,7 +20,8 @@ you a real editor instead.
 
 ### What it does today
 
-- Fills flat PDFs (no form fields) by overlaying text where it belongs.
+- Fills flat PDFs (no form fields) by overlaying text where it belongs, snapped to the line.
+- Per-character (comb) fields: one character centered per cell (postal codes, SINs, dates).
 - Browser editor: drag values over the rendered page, 1px nudges with the arrow
   keys, signature left blank.
 - Runs as a Claude Code skill. MIT licensed, and it never touches the network at runtime.
