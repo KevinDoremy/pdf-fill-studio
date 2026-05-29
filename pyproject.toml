@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pdf-fill-studio"
-version = "0.3.1"
+version = "0.4.0"
 description = "Fill PDF forms locally and place each value precisely in a browser editor. Flat, AcroForm, and per-character (comb) fields. No cloud, no Adobe."
 readme = "README.md"
 license = { text = "MIT" }
