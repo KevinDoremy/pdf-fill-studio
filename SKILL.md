@@ -10,8 +10,12 @@ Fill a PDF and let the user place the values in a browser editor, then export a 
 ## When to use
 The user gives you a PDF to fill. For flat PDFs (no form fields), follow the flow below.
 
+## Setup (once)
+Dependencies live in a project venv (the system Python is usually externally managed):
+`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
+
 ## Flow
-1. Detect the type: `python3 -m pdf_fill_studio.cli <input.pdf> -o out/<name>_rempli.pdf`
+1. Detect the type and start: `.venv/bin/python -m pdf_fill_studio.cli <input.pdf> -o out/<name>_rempli.pdf`
    - If detection reports `acroform` or `xfa`, tell the user that path is not in this version yet.
 2. The CLI opens a local browser editor. Tell the user to type values, drag boxes into the
    boxes/lines, nudge with arrow keys, and click "Exporter le PDF". The signature is left blank.

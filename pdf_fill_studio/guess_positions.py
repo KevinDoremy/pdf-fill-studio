@@ -28,7 +28,7 @@ def guess_positions(path):
             pages_out.append({"page": pidx, "width": page.width, "height": page.height})
             words = page.extract_words(use_text_flow=False)
             words = sorted(words, key=lambda w: (round(w["top"]), w["x0"]))
-            for i, w in enumerate(words):
+            for w in words:
                 text = w["text"]
                 if not _looks_like_label(text):
                     continue

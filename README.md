@@ -16,26 +16,27 @@ slow. The hosted tools that do this upload your document to a server, which you
 don't want for tax or insurance paperwork. This keeps everything local and gives
 you a real editor instead.
 
-### What it does
+### What it does today
 
-- Handles the three kinds of PDF forms: plain (text overlay), AcroForm (native
-  fields), and XFA, with an Adobe Reader fallback for the dynamic XFA forms that
-  defeat every headless library.
+- Fills flat PDFs (no form fields) by overlaying text where it belongs.
 - Browser editor: drag values over the rendered page, 1px nudges with the arrow
   keys, signature left blank.
-- Pulls known fields from a private profile you keep yourself, and asks you for
-  whatever is missing. Never stores a SIN or a bank number.
-- Ships as a Claude Code skill. MIT licensed, and it never touches the network.
+- Runs as a Claude Code skill. MIT licensed, and it never touches the network at runtime.
 
-## Status
+### Roadmap
 
-MVP: flat PDFs. AcroForm, XFA, and profile autofill are on the roadmap.
+- AcroForm native-field fill and XFA, with an Adobe Reader fallback for the dynamic
+  XFA forms that defeat every headless library.
+- Profile autofill from a private file you keep yourself, asking only for what's
+  missing. A SIN or bank number is never stored.
 
 ## Install
 
 ```bash
 git clone https://github.com/KevinDoremy/pdf-fill-studio
 cd pdf-fill-studio
-pip3 install -r requirements.txt
-python3 -m pdf_fill_studio.cli path/to/form.pdf
+python3 -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python -m pdf_fill_studio.cli path/to/form.pdf
 ```

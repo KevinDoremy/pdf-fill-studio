@@ -1,8 +1,10 @@
-"""Single-use local HTTP server for the editor, plus the export->bake glue."""
+"""Local loopback HTTP server for the editor, plus the export->bake glue.
+
+Binds to 127.0.0.1 on an ephemeral port and shuts down after the export POST
+(or a timeout), so it is reachable only from this machine and only briefly.
+"""
 import json
 import os
-import secrets
-import shutil
 import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -21,7 +23,6 @@ def handle_export(job, posted, out_path):
 
 def serve(job, out_path, open_browser=True):
     """Serve the editor; bake on export POST; shut down afterwards. Returns out_path."""
-    token = secrets.token_urlsafe(8)
     done = threading.Event()
 
     class Handler(BaseHTTPRequestHandler):
@@ -74,7 +75,7 @@ def serve(job, out_path, open_browser=True):
 
     httpd = HTTPServer(("127.0.0.1", 0), Handler)
     port = httpd.server_address[1]
-    url = f"http://127.0.0.1:{port}/?t={token}"
+    url = f"http://127.0.0.1:{port}/"
     print(f"Éditeur ouvert : {url}")
     if open_browser:
         webbrowser.open(url)

@@ -1,4 +1,3 @@
-import io
 from pypdf import PdfReader
 from pdf_fill_studio.bake_overlay import bake_overlay
 
